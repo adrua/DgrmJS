@@ -5,13 +5,14 @@ import replace from '@rollup/plugin-replace';
 export default {
 	input: 'src/index.js',
 	output: {
-		file: 'dist/app/index.js',
-		format: 'iife',
+		file: 'dist/dgrmjs/index.js',
+		format: 'umd',
+		name: 'DgrmJS',
 		plugins: [
 			terser({
 				mangle: {
-					keep_classnames: false,
-					keep_fnames: false,
+					keep_classnames: true,
+					keep_fnames: true,
 					properties: {
 						regex: /^_/
 					}

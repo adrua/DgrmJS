@@ -55,6 +55,8 @@ export function deserialize(canvas, data, dontClear) {
 		let shapeEl = shapeDataToElem.get(shapeData);
 		if (!shapeEl) {
 			shapeEl = canvas[CanvasSmbl].shapeMap[shapeData.type].create(shapeData);
+			// @ts-ignore
+			shapeEl.params = shapeData.params;
 			canvas.append(shapeEl);
 			shapeDataToElem.set(shapeData, shapeEl);
 		}
@@ -80,6 +82,8 @@ export function deserialize(canvas, data, dontClear) {
 					s: pathDeserialize(/** @type {PathSerialized} */(shape).s),
 					e: pathDeserialize(/** @type {PathSerialized} */(shape).e)
 				});
+				// @ts-ignore
+				path.params = shape.params;
 				paths.push(path);
 				canvas.append(path);
 				break;

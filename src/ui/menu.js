@@ -67,7 +67,7 @@ export class Menu extends HTMLElement {
 		shadow.getElementById('menu').onclick = toggle;
 		shadow.getElementById('menu2').onclick = toggle;
 
-		click('new', () => { canvasClear(this._canvas); tipShow(true); });
+		click('new', () => { canvasClear(this._canvas); tipShow(this._canvas, true); });
 
 		click('save', () => {
 			const serialized = serialize(this._canvas);
@@ -103,8 +103,8 @@ export class Menu extends HTMLElement {
 		/** @private */ this._canvas = canvas;
 
 		// file drag to window
-		document.body.addEventListener('dragover', evt => { evt.preventDefault(); });
-		document.body.addEventListener('drop', async evt => {
+		this._canvas.addEventListener('dragover', evt => { evt.preventDefault(); });
+		this._canvas.addEventListener('drop', async evt => {
 			evt.preventDefault();
 
 			if (evt.dataTransfer?.items?.length !== 1 ||
@@ -124,7 +124,7 @@ async function loadData(canvas, png) {
 	const dgrmChunk = await dgrmPngChunkGet(png);
 	if (!dgrmChunk) { alertCantOpen(); return; }
 	if (deserialize(canvas, JSON.parse(dgrmChunk))) {
-		tipShow(false);
+		tipShow(canvas, false);
 	}
 }
 

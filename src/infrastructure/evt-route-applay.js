@@ -1,4 +1,6 @@
-/** @param {Element} elem */
+/**
+ @param {Element} elem
+*/
 export function evtRouteApplay(elem) {
 	elem.addEventListener('pointerdown', /** @param {RouteEvent} evt */ evt => {
 		if (!evt.isPrimary || evt[RouteedSmbl] || !evt.isTrusted) { return; }
@@ -11,17 +13,23 @@ export function evtRouteApplay(elem) {
 	}, { capture: true, passive: true });
 }
 
-/** @param { {clientX:number, clientY:number} } evt */
+/**
+ @param { {clientX:number, clientY:number} } evt
+*/
 function activeElemFromPoint(evt) {
 	return elemFromPointByPrioity(evt).find(el => !el.hasAttribute('data-evt-no'));
 }
 
-/** @param { {clientX:number, clientY:number} } evt */
+/**
+ @param { {clientX:number, clientY:number} } evt
+*/
 export function priorityElemFromPoint(evt) {
 	return elemFromPointByPrioity(evt)[0];
 }
 
-/** @param { {clientX:number, clientY:number} } evt */
+/**
+ @param { {clientX:number, clientY:number} } evt
+*/
 function elemFromPointByPrioity(evt) {
 	return document.elementsFromPoint(evt.clientX, evt.clientY)
 		.sort((a, b) => {

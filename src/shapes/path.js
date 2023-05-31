@@ -99,7 +99,15 @@ export function path(canvas, pathData) {
 		endSetEvtIndex(pathData.e, 2);
 
 		canvasSelectionClearSet(canvas, unSelect);
-		listenCopyDispose = listenCopy(() => [svgGrp]);
+		listenCopyDispose = listenCopy(canvas, () => [svgGrp]);
+
+		canvas.parentElement.parentElement.dispatchEvent(new CustomEvent('selectedConnector', {
+			detail: {
+				pointer: evt,
+				// @ts-ignore
+				params: evt.currentTarget.parentElement.params
+			}
+		}));
 	};
 
 	/** @type { {():void} } */

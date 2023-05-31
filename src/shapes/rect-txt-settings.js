@@ -43,6 +43,9 @@ class RectTxtSettings extends HTMLElement {
 			.ta-2 [data-cmd-arg="2"],
 			.ta-3 [data-cmd-arg="3"]
 			{ fill-opacity: 1; stroke-opacity: 1; }
+			#edit {
+				z-index: 10;
+			}
 		</style>
 		<ap-shape-edit id="edit" edit-btn="true">
 			<div class="ln">

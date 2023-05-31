@@ -3,7 +3,7 @@ let editModalDiv;
 /** @param {number} bottomX, @param {number} bottomY, @param {HTMLElement} elem */
 export function modalCreate(bottomX, bottomY, elem) {
 	editModalDiv = document.createElement('div');
-	editModalDiv.style.cssText = 'position: fixed; box-shadow: 0px 0px 58px 2px rgb(34 60 80 / 20%); border-radius: 16px; background-color: rgba(255,255,255, .9);';
+	editModalDiv.style.cssText = 'position: fixed; box-shadow: 0px 0px 58px 2px rgb(34 60 80 / 20%); border-radius: 16px; background-color: rgba(255,255,255, .9);z-index:10;';
 	editModalDiv.append(elem);
 	document.body.append(editModalDiv);
 

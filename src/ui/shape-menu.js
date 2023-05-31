@@ -11,7 +11,7 @@ export class ShapeMenu extends HTMLElement {
 			.menu {
 				overflow-x: auto;
 				padding: 0;
-				position: fixed;
+				position: absolute;
 				top: 50%;
 				left: 5px;
 				transform: translateY(-50%);
@@ -63,6 +63,7 @@ export class ShapeMenu extends HTMLElement {
 			<div id="menu" class="menu" style="touch-action: none;">
 				<div class="content">
 					<svg class="stroke" data-cmd="shapeAdd" data-cmd-arg="1" viewBox="0 0 24 24" width="24" height="24"><circle r="9" cx="12" cy="12"></circle></svg>
+					<svg class="stroke" data-cmd="shapeAdd" data-cmd-arg="5" viewBox="0 0 24 24" width="24" height="24"><circle r="9" cx="12" cy="12"></circle><circle r="7" cx="12" cy="12"></circle></svg>
 					<svg class="stroke" data-cmd="shapeAdd" data-cmd-arg="4" viewBox="0 0 24 24" width="24" height="24"><path d="M2 12 L12 2 L22 12 L12 22 Z" stroke-linejoin="round"></path></svg>
 					<svg class="stroke" data-cmd="shapeAdd" data-cmd-arg="2" viewBox="0 0 24 24" width="24" height="24"><rect x="2" y="4" width="20" height="16" rx="3" ry="3"></rect></svg>
 					<svg data-cmd="shapeAdd" data-cmd-arg="0" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13 8v8a3 3 0 0 1-3 3H7.83a3.001 3.001 0 1 1 0-2H10a1 1 0 0 0 1-1V8a3 3 0 0 1 3-3h3V2l5 4-5 4V7h-3a1 1 0 0 0-1 1z" fill="rgba(52,71,103,1)"/></svg>
@@ -119,7 +120,7 @@ export class ShapeMenu extends HTMLElement {
 				this._pressedShapeTemplKey = parseInt(evt.currentTarget.getAttribute('data-cmd-arg'));
 
 				// for emulate pointerleave
-				this._parentElem = document.elementFromPoint(evt.clientX, evt.clientY);
+				this._parentElem = evt.currentTarget;
 				this._pointElem = this._parentElem;
 				this._isNativePointerleaveTriggered = null;
 				break;
@@ -134,7 +135,7 @@ export class ShapeMenu extends HTMLElement {
 	 * @private
 	 */
 	_shapeCreate(evt) {
-		tipShow(false);
+		tipShow(this._canvas, false);
 
 		const evtPoint = pointInCanvas(this._canvas[CanvasSmbl].data, evt.clientX, evt.clientY);
 

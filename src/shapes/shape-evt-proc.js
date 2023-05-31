@@ -236,7 +236,15 @@ function shapeEvtProc(canvas, svgGrp, shapeData, connectorsInnerPosition, onEdit
 			classAdd(svgGrp, 'select');
 
 			canvasSelectionClearSet(canvas, unSelect);
-			listenCopyDispose = listenCopy(() => [svgGrp]);
+			listenCopyDispose = listenCopy(canvas, () => [svgGrp]);
+
+			canvas.parentElement.parentElement.dispatchEvent(new CustomEvent('selectedNode', {
+				detail: {
+					pointer: _,
+					// @ts-ignore
+					params: _.currentTarget.parentElement.params
+				}
+			}));
 		},
 		// onOutdown
 		unSelect);
@@ -289,6 +297,7 @@ function shapeEvtProc(canvas, svgGrp, shapeData, connectorsInnerPosition, onEdit
 	data: ShapeData
 	del?: ()=>void
 	draw?: ()=>void
+	params: any
 }} Shape
  */
 

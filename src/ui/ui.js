@@ -21,8 +21,13 @@ export function uiDisable(isDisable) {
 	}
 }
 
-/** @param {boolean} show */
-export function tipShow(show) {
-	document.getElementById('diagram').style.pointerEvents = show ? 'none' : 'unset';
-	document.getElementById('tip').style.display = show ? 'unset' : 'none';
+/**
+ * @param {boolean} show
+ * @param {import("../infrastructure/canvas-smbl").CanvasElement} canvas
+ */
+export function tipShow(canvas, show) {
+	// @ts-ignore
+	canvas.style.pointerEvents = show ? 'none' : 'unset';
+	// @ts-ignore
+	canvas.parentElement.parentNode.querySelector('#tip').style.display = show ? 'unset' : 'none';
 }

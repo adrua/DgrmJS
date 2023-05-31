@@ -16,36 +16,39 @@ import { tipShow } from '../ui/ui.js';
 
 const clipboardDataKey = 'dgrm';
 
-/** @param {() => Array<ShapeElement & PathElement>} shapesToClipboardGetter */
-export function listenCopy(shapesToClipboardGetter) {
+/**
+ * @param {() => Array<ShapeElement & PathElement>} shapesToClipboardGetter
+ * @param {Element | GlobalEventHandlers} canvas
+ */
+export function listenCopy(canvas, shapesToClipboardGetter) {
 	/** @param {ClipboardEvent & {target:HTMLElement | SVGElement}} evt */
 	function onCopy(evt) {
 		const shapes = shapesToClipboardGetter();
-		if (document.activeElement === shapes[0].ownerSVGElement) {
+		if (canvas.activeElement === shapes[0].ownerSVGElement) {
 			evt.preventDefault();
 			evt.clipboardData.setData(
 				clipboardDataKey,
 				JSON.stringify(copyDataCreate(shapes)));
 		}
 	}
-	document.addEventListener('copy', onCopy);
+	canvas.addEventListener('copy', onCopy);
 
 	// dispose fn
 	return function() {
-		listenDel(document, 'copy', onCopy);
+		listenDel(canvas, 'copy', onCopy);
 	};
 }
 
 /** @param {CanvasElement} canvas */
 export function copyPastApplay(canvas) {
-	listen(document, 'paste', /** @param {ClipboardEvent & {target:HTMLElement | SVGElement}} evt */ evt => {
+	listen(canvas, 'paste', /** @param {ClipboardEvent & {target:HTMLElement | SVGElement}} evt */ evt => {
 		if (evt.target.tagName.toUpperCase() === 'TEXTAREA') { return; }
 		// if (document.activeElement !== canvas.ownerSVGElement) { return; }
 
 		const dataStr = evt.clipboardData.getData(clipboardDataKey);
 		if (!dataStr) { return; }
 
-		tipShow(false);
+		tipShow(canvas, false);
 		canvasSelectionClear(canvas);
 		past(canvas, JSON.parse(dataStr));
 	});
@@ -76,6 +79,9 @@ const highlightClass = 'highlight';
  */
 export function groupSelectApplay(canvas) {
 	const svg = canvas.ownerSVGElement;
+	/**
+	 * @type {string | number | NodeJS.Timeout}
+	 */
 	let timer;
 	/** @type {Point} */ let selectStart;
 	/** @type {SVGCircleElement} */ let startCircle;
@@ -336,7 +342,7 @@ function groupEvtProc(canvas, selected) {
 	svg.addEventListener('pointerdown', down, { passive: true, capture: true });
 
 	canvasSelectionClearSet(canvas, dispose);
-	let listenCopyDispose = listenCopy(() => elemsToCopyGet(selected));
+	let listenCopyDispose = listenCopy(canvas, () => elemsToCopyGet(selected));
 }
 
 /** @param {Selected} selected */

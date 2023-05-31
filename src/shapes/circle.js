@@ -8,7 +8,54 @@ import { shapeCreate } from './shape-evt-proc.js';
 export function circle(canvas, circleData) {
 	const templ = `
 		<circle data-key="outer" data-evt-no data-evt-index="2" r="72" fill="transparent" stroke-width="0" />
-		<circle data-key="main" r="48" fill="#ff6600" stroke="#fff" stroke-width="1" />
+		<circle data-key="main" r="48" fill="#00ff00" stroke="#fff" stroke-width="1" />
+		<text data-key="text" x="0" y="0" text-anchor="middle" style="pointer-events: none;" fill="#fff">&nbsp;</text>`;
+
+	const shape = shapeCreate(canvas, circleData, templ,
+		{
+			right: { dir: 'right', position: { x: 48, y: 0 } },
+			left: { dir: 'left', position: { x: -48, y: 0 } },
+			bottom: { dir: 'bottom', position: { x: 0, y: 48 } },
+			top: { dir: 'top', position: { x: 0, y: -48 } }
+		},
+		// onTextChange
+		txtEl => {
+			const newRadius = textElRadius(txtEl, 48, 24);
+			if (newRadius !== circleData.r) {
+				circleData.r = newRadius;
+				resize();
+			}
+		});
+
+	function resize() {
+		shape.cons.right.position.x = circleData.r;
+		shape.cons.left.position.x = -circleData.r;
+		shape.cons.bottom.position.y = circleData.r;
+		shape.cons.top.position.y = -circleData.r;
+
+		for (const connectorKey in shape.cons) {
+			positionSet(child(shape.el, connectorKey), shape.cons[connectorKey].position);
+		}
+
+		radiusSet(shape.el, 'outer', circleData.r + 24);
+		radiusSet(shape.el, 'main', circleData.r);
+		shape.draw();
+	}
+
+	if (!!circleData.r && circleData.r !== 48) { resize(); } else { shape.draw(); }
+
+	return shape.el;
+}
+
+/**
+ * @param {CanvasElement} canvas
+ * @param {CircleData} circleData
+ */
+export function circleEnd(canvas, circleData) {
+	const templ = `
+		<circle data-key="outer" data-evt-no data-evt-index="2" r="72" fill="transparent" stroke-width="0" />
+		<circle data-key="main" r="48" fill="#000000" stroke="#fff" stroke-width="1" />
+		<circle data-key="inner" r="40" fill="#ff0000" stroke="#fff" stroke-width="1" />
 		<text data-key="text" x="0" y="0" text-anchor="middle" style="pointer-events: none;" fill="#fff">&nbsp;</text>`;
 
 	const shape = shapeCreate(canvas, circleData, templ,
